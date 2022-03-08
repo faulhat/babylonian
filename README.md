@@ -1,36 +1,25 @@
 # babylonian
 
-FIXME: description
+A command line tool to calculate approximate square roots with the Babylonian method.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+```
+git clone https://github.com/tafaulhaber590/babylonian/
+cd babylonian/
+lein uberjar
+```
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar babylonian-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+To approximate the square root of _x_ with _n_ iterations.
+```
+./sqrt.sh [x] [n]
+```
 
 ## License
 
-Copyright © 2022 FIXME
+Copyright © 2022 Thomas Faulhaber
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
