@@ -5,15 +5,19 @@
 (defn next-guess [x guess]
   (/ (+ guess (/ x guess)) 2.0))
 
-;; Recursive function to make a given number of guesses
+;; Recursive function to do a given number of iterations.
 (defn iter-down [x guess upper i]
-  (println (str "Guess " (+ i 1) "/" upper ": " guess))
-  (if (< i (- upper 1))
-    (iter-down x (next-guess x guess) upper (+ i 1))))
+  (def new-guess (next-guess x guess))
+  (println (str "Iteration " i ":"))
+  (println (str "(" guess " + " x "/" guess ") / 2 = " new-guess "\n"))
+  (if (< i upper)
+    (iter-down x new-guess upper (+ i 1))))
 
-;; Wrapper function to make n guesses starting with a random guess.
+;; Wrapper function to make n guesses starting with an initial random guess.
 (defn n-guesses [x n]
-  (iter-down x (* (rand) x) n 0))
+  (def init-guess (* (rand) x))
+  (println (str "Initial guess: " init-guess "\n"))
+  (iter-down x init-guess n 0))
 
 ;; Utility function to fail after printing a message.
 (defn fatalln [msg]
@@ -31,7 +35,7 @@
   (try
     (def x (Double/parseDouble (first args)))
     (if (= (count args) 1)
-      (n-guesses x 10) ;; Make ten guesses by default
+      (n-guesses x 10) ;; Do ten iterations by default.
       (try ;; Number of args can only be 2
         (def n (Integer/parseInt (second args)))
         (n-guesses x n)
