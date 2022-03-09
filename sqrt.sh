@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java -jar target/uberjar/babylonian-0.1.0-SNAPSHOT-standalone.jar $1 $2
+java -jar target/uberjar/babylonian-0.1.0-SNAPSHOT-standalone.jar "$@"

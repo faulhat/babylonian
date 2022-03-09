@@ -9,8 +9,7 @@
 (defn iter-down [x guess upper i]
   (println (str "Guess " (+ i 1) "/" upper ": " guess))
   (if (< i (- upper 1))
-    (iter-down x (next-guess x guess) upper (+ i 1))
-    (println "Done!")))
+    (iter-down x (next-guess x guess) upper (+ i 1))))
 
 ;; Wrapper function to make n guesses starting with a random guess.
 (defn n-guesses [x n]
@@ -22,19 +21,24 @@
   (System/exit 1))
 
 (defn -main [& args]
+  ;; Ensure we have the right number of command line args
   (if (< (count args) 1)
-      (println "Error! Not enough command line arguments supplied.")
-      (try
-        (def x (Double/parseDouble (first args)))
-        (if (= (count args) 1)
-          (n-guesses x 10) ;; Make ten guesses by default
-          (if (= (count args) 2) ;; If a value for n is supplied
-            (try
-                (def n (Integer/parseInt (second args)))
-                (n-guesses x n)
-                (catch NumberFormatException _
-                  (fatalln (str "Error! n value is not a valid integer.\nGot: " (second args)))))
-            (fatalln "Error! Too many command line arguments supplied.")))
+    (fatalln "Error! Not enough command line arguments supplied.")
+    (if (> (count args) 2)
+      (fatalln "Error! Too many command line arguments supplied.")))
+
+  ;; Now, number of args can only be 1 or 2
+  (try
+    (def x (Double/parseDouble (first args)))
+    (if (= (count args) 1)
+      (n-guesses x 10) ;; Make ten guesses by default
+      (try ;; Number of args can only be 2
+        (def n (Integer/parseInt (second args)))
+        (n-guesses x n)
         (catch NumberFormatException _
-          (fatalln (str "Error! x value is not a valid floating-point number.\nGot: " (first args))))
-        (catch Exception e (throw e)))))
+          (fatalln (str "Error! n value is not a valid integer.\nGot: " (second args))))))
+    (catch NumberFormatException _
+      (fatalln (str "Error! x value is not a valid floating-point number.\nGot: " (first args))))
+    (catch Exception e (throw e)))
+  
+  (println "Done!"))
