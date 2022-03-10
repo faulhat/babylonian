@@ -26,15 +26,18 @@
 
 (defn -main [& args]
   ;; Ensure we have the right number of command line args
-  (if (< (count args) 1)
-    (fatalln "Error! Not enough command line arguments supplied.")
-    (if (> (count args) 2)
-      (fatalln "Error! Too many command line arguments supplied.")))
+  (def n-args (count args))
+  (if (or (< n-args 1) (> n-args 2))
+    (do
+      (if (< n-args 1)
+        (println "Error! Not enough command line arguments.")
+        (println "Error! Too many command line arguments."))
+      (fatalln "\nUsage:\n  sqrt [radicand] [n_iterations]\n\nIf no value is provided for n_iterations, 10 iterations will be run by default.")))
 
   ;; Now, number of args can only be 1 or 2
   (try
     (def x (Double/parseDouble (first args)))
-    (if (= (count args) 1)
+    (if (= n-args 1)
       (n-guesses x 10) ;; Do ten iterations by default.
       (try ;; Number of args can only be 2
         (def n (Integer/parseInt (second args)))
