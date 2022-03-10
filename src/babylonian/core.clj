@@ -7,45 +7,47 @@
 
 ;; Recursive function to do a given number of iterations.
 (defn iter-down [x guess upper i]
-  (def new-guess (next-guess x guess))
-  (println (str "Iteration " i ":"))
-  (println (str "(" guess " + " x "/" guess ") / 2 = " new-guess "\n"))
-  (if (< i upper)
-    (iter-down x new-guess upper (+ i 1))))
+  (let [new-guess (next-guess x guess)]
+    (println (str "Iteration " i ":"))
+    (println (str "(" guess " + " x "/" guess ") / 2 = " new-guess "\n"))
+    (if (< i upper)
+      (iter-down x new-guess upper (+ i 1)))))
 
 ;; Wrapper function to make n guesses starting with an initial random guess.
 (defn n-guesses [x n]
-  (def init-guess (* (rand) x))
-  (println (str "Initial guess: " init-guess "\n"))
-  (iter-down x init-guess n 0))
-
-;; Utility function to fail after printing a message.
-(defn fatalln [msg]
-  (println msg)
-  (System/exit 1))
+  (let [init-guess (* (rand) x)]
+    (println (str "Initial guess: " init-guess "\n"))
+    (iter-down x init-guess n 0)))
 
 (defn -main [& args]
   ;; Ensure we have the right number of command line args
-  (def n-args (count args))
-  (if (or (< n-args 1) (> n-args 2))
-    (do
-      (if (< n-args 1)
-        (println "Error! Not enough command line arguments.")
-        (println "Error! Too many command line arguments."))
-      (fatalln "\nUsage:\n  sqrt [radicand] [n_iterations]\n\nIf no value is provided for n_iterations, 10 iterations will be run by default.")))
+  (let [n-args (count args)]
+    (if (or (< n-args 1) (> n-args 2))
+      (do
+        (if (< n-args 1)
+          (println "Error! Not enough command line arguments.")
+          (println "Error! Too many command line arguments."))
+        (println "\nUsage:")
+        (println "  sqrt [radicand] [n_iterations]")
+        (println "\nIf no value is provided for n_iterations, 10 iterations will be run by default.")
+        (System/exit 1))
 
-  ;; Now, number of args can only be 1 or 2
-  (try
-    (def x (Double/parseDouble (first args)))
-    (if (= n-args 1)
-      (n-guesses x 10) ;; Do ten iterations by default.
-      (try ;; Number of args can only be 2
-        (def n (Integer/parseInt (second args)))
-        (n-guesses x n)
+      ;; Now, number of args can only be 1 or 2
+      (try
+        (let [x (Double/parseDouble (first args))]
+          (if (= n-args 1)
+            (n-guesses x 10) ;; Do ten iterations by default.
+            (try ;; Number of args can only be 2
+              (let [n (Integer/parseInt (second args))]
+                (n-guesses x n))
+              (catch NumberFormatException _
+                (println "Error! n value is not a valid integer.")
+                (println (str "Got: " (second args)))
+                (System/exit 1)))))
         (catch NumberFormatException _
-          (fatalln (str "Error! n value is not a valid integer.\nGot: " (second args))))))
-    (catch NumberFormatException _
-      (fatalln (str "Error! x value is not a valid floating-point number.\nGot: " (first args))))
-    (catch Exception e (throw e)))
+          (println "Error! x value is not a valid floating-point number.")
+          (println (str "Got: " (first args)))
+          (System/exit 1))
+        (catch Exception e (throw e)))))
   
   (println "Done!"))
