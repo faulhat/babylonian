@@ -17,7 +17,7 @@
 (defn n-guesses [x n]
   (let [init-guess (* (rand) x)]
     (println (str "Initial guess: " init-guess "\n"))
-    (iter-down x init-guess n 0)))
+    (iter-down x init-guess n 1)))
 
 (defn -main [& args]
   ;; Ensure we have the right number of command line args
