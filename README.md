@@ -6,7 +6,7 @@ A command line tool to calculate approximate square roots with the Babylonian me
 
 Be sure to have [leiningen](https://github.com/technomancy/leiningen) installed.
 
-To approximate the square root of _x_ with _n_ iterations:
+To approximate the square root of _x_ to _n_ decimal places:
 ```
 lein run [x] [n]
 ```
