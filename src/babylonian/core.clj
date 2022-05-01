@@ -5,20 +5,35 @@
 (defn next-guess [x guess]
   (/ (+ guess (/ x guess)) 2.0))
 
-;; Multiply by 10^n and truncate to int
-(defn to-places [x n]
-  (int (* x (Math/pow 10 n))))
+(defn format-places [x n] (format (str "%." n "f") x))
+
+;; Round x and y to n places and compare them for equality
+(defn eq-places [x y n]
+  (let [
+    x-str (format-places x n)
+    y-str (format-places y n)
+  ]
+    (= (compare x-str y-str) 0)))
+
+;; Round x to n places
+(defn to-places [x n] (Double/parseDouble (format-places x n)))
 
 ;; Recursive function to find square root to a given number of decimal places
 (defn iter-down [x guess places i]
   ;; Where i is the number of iterations so far
   (let [new-guess (next-guess x guess)]
     (println (str "Iteration " (+ i 1) ":"))
-    (println (str "(" guess " + " x "/" guess ") / 2 = " new-guess "\n"))
-    (let [truncated (to-places new-guess places)]
-      (if (not= (to-places guess places) truncated)
-        (iter-down x new-guess places (+ i 1))
-        (println (str "Final guess: " (/ truncated (Math/pow 10.0 places))))))))
+
+    (let [
+      x-str (format-places x places)
+      guess-str (format-places guess places)
+      new-guess-str (format-places new-guess places)
+    ]
+      (println (str "(" guess-str " + " x-str "/" guess-str ") / 2 = " new-guess-str "\n")))
+      
+    (if (not (eq-places guess new-guess places))
+      (iter-down x new-guess places (+ i 1))
+      (println (str "Final guess: " (to-places new-guess places))))))
 
 ;; Wrapper function to make a guess to n places starting with an initial random guess.
 (defn get-guess [x n]
